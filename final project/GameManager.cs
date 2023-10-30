@@ -99,7 +99,7 @@ namespace final_project
 
                 Console.SetCursorPosition(42, 1);
                 Console.WriteLine(speed_x + " and " + speed_y);
-                Task.Delay(200).Wait();
+                Task.Delay(200).Wait(); 
             }
         }
 

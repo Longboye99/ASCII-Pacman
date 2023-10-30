@@ -77,7 +77,14 @@
                         temp = temp.previous;
                     }
 
-                    return (path[path.Count - 2].x, path[path.Count - 2].y);
+                    if (path.Count < 2)
+                    {
+                        return (path[path.Count - 1].x, path[path.Count - 1].y);
+                    }
+                    else
+                    {
+                        return (path[path.Count - 2].x, path[path.Count - 2].y);
+                    }
                     //Console.WriteLine("done");
 
                 }
