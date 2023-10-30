@@ -19,7 +19,10 @@ namespace final_project
         char[,] dotsArray;
         public bool[,] mapArray;
 
-        Ghost ghost = new Ghost(16, 10, ConsoleColor.Red);
+        Ghost shadow = new Ghost(20, 8, ConsoleColor.Red);
+        Ghost speedy = new Ghost(20, 10, ConsoleColor.Magenta);
+        Ghost bashful = new Ghost(17, 10, ConsoleColor.Cyan);
+        Ghost pokey = new Ghost(23, 10, ConsoleColor.DarkYellow);
 
 
         public GameManager()
@@ -30,14 +33,21 @@ namespace final_project
         public void RunGame()
         {
             display.RenderMap();
-            display.RenderGhost(ghost.ghost_X, ghost.ghost_Y, ghost.tempX, ghost.tempY, ghost.ghostColor);
+            display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
+            display.RenderGhost(shadow.ghost_X, shadow.ghost_Y, shadow.tempX, shadow.tempY, shadow.ghostColor);
+            display.RenderGhost(speedy.ghost_X, speedy.ghost_Y, speedy.tempX, speedy.tempY, speedy.ghostColor);
+            display.RenderGhost(bashful.ghost_X, bashful.ghost_Y, bashful.tempX, bashful.tempY, bashful.ghostColor);
+            display.RenderGhost(pokey.ghost_X, pokey.ghost_Y, pokey.tempX, pokey.tempY, pokey.ghostColor);
             display.RenderDot(dotsArray);
-            //ReadKey(true);
+            ReadKey(true);
             while (true)
             {
                 display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
 
-                display.RenderGhost(ghost.ghost_X, ghost.ghost_Y, ghost.tempX, ghost.tempY, ghost.ghostColor);
+                display.RenderGhost(shadow.ghost_X, shadow.ghost_Y, shadow.tempX, shadow.tempY, shadow.ghostColor);
+                display.RenderGhost(speedy.ghost_X, speedy.ghost_Y, speedy.tempX, speedy.tempY, speedy.ghostColor);
+                display.RenderGhost(bashful.ghost_X, bashful.ghost_Y, bashful.tempX, bashful.tempY, bashful.ghostColor);
+                display.RenderGhost(pokey.ghost_X, pokey.ghost_Y, pokey.tempX, pokey.tempY, pokey.ghostColor);
 
                 if (addScore() == true)
                 {
@@ -51,7 +61,7 @@ namespace final_project
                     break;
                 }
 
-                if (pos_X == ghost.ghost_X && pos_Y == ghost.ghost_Y)
+                if (pos_X == shadow.ghost_X && pos_Y == shadow.ghost_Y)
                 {
                     if (energize_Trigger == true)
                     {
@@ -60,6 +70,7 @@ namespace final_project
                     else
                     {
                         Clear();
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("You lost");
                         break;
                     }
@@ -78,14 +89,17 @@ namespace final_project
                         energize_timer = 50;
                     }
                 }
-                ghost.GhostNextPos(pos_X, pos_Y);
+                shadow.GhostNextPos(pos_X, pos_Y);
+                speedy.GhostNextPos(pos_X, pos_Y);
+                bashful.GhostNextPos(pos_X, pos_Y);
+                pokey.GhostNextPos(pos_X, pos_Y);
 
 
 
 
                 Console.SetCursorPosition(42, 1);
                 Console.WriteLine(speed_x + " and " + speed_y);
-                Task.Delay(500).Wait();
+                Task.Delay(200).Wait();
             }
         }
 

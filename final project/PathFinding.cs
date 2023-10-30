@@ -38,11 +38,14 @@
 
         public PathFinding()
         {
-            SetMapArray();
+
         }
 
         public (int, int) Run(int startX, int startY, int endX, int endY)
         {
+
+
+            SetMapArray();
             start = mapArray[startX, startY];
             end = mapArray[endX, endY];
             List<Spot> openList = new List<Spot>();
@@ -176,7 +179,6 @@
             rowCount = _rowCount;
         }
 
-        ~Spot() { }
         public void AddNeighbors(Spot[,] mapArray)
         {
             if (x < columnCount - 1)

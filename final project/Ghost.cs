@@ -12,8 +12,8 @@
         {
             ghost_X = x;
             ghost_Y = y;
-            tempX = 100;
-            tempY = 100;
+            tempX = x-1;
+            tempY = y-1;
 
 
             ghostColor = color;

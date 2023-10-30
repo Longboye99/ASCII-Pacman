@@ -10,7 +10,6 @@
 
             Display display = new Display();
 
-            gameManager.RunGame();
             int selectOption = titlescreen.RunMenu();
             switch (selectOption)
             {

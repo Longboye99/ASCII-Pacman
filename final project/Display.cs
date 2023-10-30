@@ -152,8 +152,13 @@
         {
             Console.SetCursorPosition(x, y);
             Console.BackgroundColor = ghostcolor;
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write('"');
+
+            Console.SetCursorPosition(tempX, tempY);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write(' ');
         }
     }
 }
