@@ -11,75 +11,107 @@ namespace final_project
         public int score = 0;
         public int energize_timer = 50;
         public bool energize_Trigger = false;
-        int dotcounter = 168;
+        int dotcounter = 172;
 
         Display display = new Display();
         string Dots = Display.dots;
-        string Map = Display.map;
+        string Map =
+    "╔═══════════════════╦═══════════════════╗\n" +
+    "║█                 █║█                 █║\n" +
+    "║█ █╔═╗█ █╔═════╗█ █║█ █╔═════╗█ █╔═╗█ █║\n" +
+    "║█ █╚═╝█ █╚═════╝█ █╨█ █╚═════╝█ █╚═╝█ █║\n" +
+    "║█                                     █║\n" +
+    "║█ █═══█ █╥█ █══════╦══════█ █╥█ █═══█ █║\n" +
+    "║█       █║█       █║█       █║█       █║\n" +
+    "╚═════╗█ █╠══════█ █╨█ █══════╣█ █╔═════╝\n" +
+    "██████║█ █║█                 █║█ █║██████\n" +
+    "══════╝█ █╨█ █╔════█ █════╗█ █╨█ █╚══════\n" +
+    "|            █║           ║█            |\n" +
+    "══════╗█  ╥█ █║███████████║█ █╥█ █╔══════\n" +
+    "██████║█  ║█ █╚═══════════╝█ █║█ █║██████\n" +
+    "██████║█  ║█                 █║█ █║██████\n" +
+    "╔═════╝█  ╨█ █══════╦══════█ █╨█ █╚═════╗\n" +
+    "║█                 █║█                 █║\n" +
+    "║█ █══╗█ █═══════█ █╨█ █═══════█ █╔══█ █║\n" +
+    "║█   █║█                         █║█   █║\n" +
+    "╠══█ █╨█ █╥█ █══════╦══════█ █╥█ █╨█ █══╣\n" +
+    "║█       █║█       █║█       █║█       █║\n" +
+    "║█ █══════╩══════█ █╨█ █══════╩══════█ █║\n" +
+    "║█                                     █║\n" +
+    "╚═══════════════════════════════════════╝";
         char[,] dotsArray;
         public bool[,] mapArray;
-
-        Ghost shadow = new Ghost(20, 8, ConsoleColor.Red);
-        Ghost speedy = new Ghost(20, 10, ConsoleColor.Magenta);
-        Ghost bashful = new Ghost(17, 10, ConsoleColor.Cyan);
-        Ghost pokey = new Ghost(23, 10, ConsoleColor.DarkYellow);
-
 
         public GameManager()
         {
             SetMapArray();
             SetDotsArray();
+
         }
         public void RunGame()
         {
+            Ghost a = new Ghost(20, 8, ConsoleColor.Red, mapArray);
+            Ghost b = new Ghost(17, 10, ConsoleColor.Magenta, mapArray);
+            Ghost c = new Ghost(20, 10, ConsoleColor.DarkYellow, mapArray);
+            Ghost d = new Ghost(23, 10, ConsoleColor.Cyan, mapArray);
             display.RenderMap();
             display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
-            display.RenderGhost(shadow.ghost_X, shadow.ghost_Y, shadow.tempX, shadow.tempY, shadow.ghostColor);
-            display.RenderGhost(speedy.ghost_X, speedy.ghost_Y, speedy.tempX, speedy.tempY, speedy.ghostColor);
-            display.RenderGhost(bashful.ghost_X, bashful.ghost_Y, bashful.tempX, bashful.tempY, bashful.ghostColor);
-            display.RenderGhost(pokey.ghost_X, pokey.ghost_Y, pokey.tempX, pokey.tempY, pokey.ghostColor);
+            display.RenderGhost(a.x, a.y, a.tempX, a.tempY, a.color);
+            display.RenderGhost(b.x, b.y, b.tempX, b.tempY, b.color);
+            display.RenderGhost(c.x, c.y, c.tempX, c.tempY, c.color);
+            display.RenderGhost(d.x, d.y, d.tempX, d.tempY, d.color);
             display.RenderDot(dotsArray);
             ReadKey(true);
             while (true)
             {
                 display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
-
-                display.RenderGhost(shadow.ghost_X, shadow.ghost_Y, shadow.tempX, shadow.tempY, shadow.ghostColor);
-                display.RenderGhost(speedy.ghost_X, speedy.ghost_Y, speedy.tempX, speedy.tempY, speedy.ghostColor);
-                display.RenderGhost(bashful.ghost_X, bashful.ghost_Y, bashful.tempX, bashful.tempY, bashful.ghostColor);
-                display.RenderGhost(pokey.ghost_X, pokey.ghost_Y, pokey.tempX, pokey.tempY, pokey.ghostColor);
-
+                display.RenderGhost(a.x, a.y, a.tempX, a.tempY, a.color);
+                display.RenderGhost(b.x, b.y, b.tempX, b.tempY, b.color);
+                display.RenderGhost(c.x, c.y, c.tempX, c.tempY, c.color);
+                display.RenderGhost(d.x, d.y, d.tempX, d.tempY, d.color);
+                if (a.Update(pos_X, pos_Y, energize_Trigger) == false)
+                {
+                    break;
+                }
+                if (b.Update(pos_X, pos_Y, energize_Trigger) == false)
+                {
+                    break;
+                }
+                if (c.Update(pos_X, pos_Y, energize_Trigger) == false)
+                {
+                    break;
+                }
+                if (d.Update(pos_X, pos_Y, energize_Trigger) == false)
+                {
+                    break;
+                }
+                input();
+                updatePos();
                 if (addScore() == true)
                 {
                     display.RenderDot(dotsArray);
                 }
-
                 if (dotcounter == 0)
                 {
                     Clear();
-                    Console.WriteLine("You win");
+                    display.RenderMap();
+                    display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
+                    Task.Delay(2000).Wait();
+                    Clear();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine(@"
+██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗██╗██╗██╗
+╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║██║██║██║
+ ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║██║██║██║
+  ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║╚═╝╚═╝╚═╝
+   ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║██╗██╗██╗
+   ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝╚═╝╚═╝
+Thanks for playing! Press any key to exit.
+");
+                    ReadKey(true);
+                    Environment.Exit(0);
                     break;
                 }
-
-                if (pos_X == shadow.ghost_X && pos_Y == shadow.ghost_Y)
-                {
-                    if (energize_Trigger == true)
-                    {
-
-                    }
-                    else
-                    {
-                        Clear();
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine("You lost");
-                        break;
-                    }
-                }
-
-                input();
-
-                updatePos();
-
                 if (energize_Trigger == true)
                 {
                     energize_timer--;
@@ -89,18 +121,40 @@ namespace final_project
                         energize_timer = 50;
                     }
                 }
-                shadow.GhostNextPos(pos_X, pos_Y);
-                speedy.GhostNextPos(pos_X, pos_Y);
-                bashful.GhostNextPos(pos_X, pos_Y);
-                pokey.GhostNextPos(pos_X, pos_Y);
 
+                a.NextMove(pos_X, pos_Y);
+                b.NextMove(pos_X, pos_Y);
+                c.NextMove(pos_X, pos_Y);
+                d.NextMove(pos_X, pos_Y);
 
 
 
                 Console.SetCursorPosition(42, 1);
-                Console.WriteLine(speed_x + " and " + speed_y);
-                Task.Delay(200).Wait(); 
+                Console.WriteLine("Score : " + score);
+                Task.Delay(200).Wait();
             }
+            Clear();
+            display.RenderMap();
+            display.RenderDot(dotsArray);
+            display.RenderGhost(a.x, a.y, a.tempX, a.tempY, a.color);
+            display.RenderGhost(b.x, b.y, b.tempX, b.tempY, b.color);
+            display.RenderGhost(c.x, c.y, c.tempX, c.tempY, c.color);
+            display.RenderGhost(d.x, d.y, d.tempX, d.tempY, d.color);
+
+            Task.Delay(2000).Wait();
+            Clear();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(@"
+ ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ 
+██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗
+██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝
+██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
+╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝
+                                                                          
+Press any key to exit.
+");
+            ReadKey(true);
         }
 
         private void SetDotsArray()
@@ -140,28 +194,28 @@ namespace final_project
                 switch (key)
                 {
                     case ConsoleKey.A or ConsoleKey.LeftArrow:
-                        if (mapArray[pos_X - 2, pos_Y] != true)
+                        if (mapArray[pos_X - 1, pos_Y] != true)
                         {
                             speed_x = -1;
                             speed_y = 0;
                         }
                         break;
                     case ConsoleKey.D or ConsoleKey.RightArrow:
-                        if (mapArray[pos_X + 2, pos_Y] != true)
+                        if (mapArray[pos_X + 1, pos_Y] != true)
                         {
                             speed_x = 1;
                             speed_y = 0;
                         }
                         break;
                     case ConsoleKey.W or ConsoleKey.UpArrow:
-                        if (mapArray[pos_X, pos_Y - 1] != true && mapArray[pos_X + 1, pos_Y - 1] != true && mapArray[pos_X - 1, pos_Y - 1] != true)
+                        if (mapArray[pos_X, pos_Y - 1] != true)
                         {
                             speed_x = 0;
                             speed_y = -1;
                         }
                         break;
                     case ConsoleKey.S or ConsoleKey.DownArrow:
-                        if (mapArray[pos_X, pos_Y + 1] != true && mapArray[pos_X + 1, pos_Y + 1] != true && mapArray[pos_X - 1, pos_Y + 1] != true)
+                        if (mapArray[pos_X, pos_Y + 1] != true)
                         {
                             speed_x = 0;
                             speed_y = 1;
@@ -175,7 +229,7 @@ namespace final_project
         {
             if (speed_x == 1)
             {
-                if (mapArray[pos_X + 2, pos_Y] != true)
+                if (mapArray[pos_X + 1, pos_Y] != true)
                 {
                     pos_X++;
                     if (pos_X > 38)
@@ -186,7 +240,7 @@ namespace final_project
             }
             else if (speed_x == -1)
             {
-                if (mapArray[pos_X - 2, pos_Y] != true)
+                if (mapArray[pos_X - 1, pos_Y] != true)
                 {
                     pos_X--;
                     if (pos_X < 2)
@@ -197,14 +251,14 @@ namespace final_project
             }
             if (speed_y == 1)
             {
-                if (mapArray[pos_X, pos_Y + 1] != true && mapArray[pos_X + 1, pos_Y + 1] != true && mapArray[pos_X - 1, pos_Y + 1] != true)
+                if (mapArray[pos_X, pos_Y + 1] != true)
                 {
                     pos_Y++;
                 }
             }
             else if (speed_y == -1)
             {
-                if (mapArray[pos_X, pos_Y - 1] != true && mapArray[pos_X + 1, pos_Y - 1] != true && mapArray[pos_X - 1, pos_Y - 1] != true)
+                if (mapArray[pos_X, pos_Y - 1] != true)
                 {
                     pos_Y--;
                 }
@@ -222,6 +276,7 @@ namespace final_project
             else if (Convert.ToString(dotsArray[pos_X, pos_Y]) == "O")
             {
                 score += 50;
+                dotcounter--;
                 if (energize_Trigger == true)
                 {
                     energize_timer = 50;

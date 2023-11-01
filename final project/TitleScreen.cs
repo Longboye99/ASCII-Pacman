@@ -9,6 +9,7 @@ namespace final_project
 
         public void displayTitle()
         {
+            Clear();
             ForegroundColor = ConsoleColor.DarkYellow;
             WriteLine(@"
 ██████╗  █████╗  ██████╗███╗   ███╗ █████╗ ███╗   ██╗
@@ -74,14 +75,12 @@ Welcome to PACMAN. What would you like to do?
             } while (key != ConsoleKey.Enter);
             return selectOption;
         }
-
         public void Startgame()
         {
             Clear();
             GameManager gameManager = new GameManager();
             gameManager.RunGame();
         }
-
         public void Controls()
         {
             Clear();
@@ -91,7 +90,6 @@ Welcome to PACMAN. What would you like to do?
             ReadKey(true);
             RunMenu();
         }
-
         public void ExitGame()
         {
             Clear();

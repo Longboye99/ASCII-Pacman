@@ -11,7 +11,7 @@
         public int columnCount;
 
 
-        private static string ghostmap =
+        public static string ghostmap =
     "╔═══════════════════╦═══════════════════╗\n" +
     "║█                 █║█                 █║\n" +
     "║█ █╔═╗█ █╔═════╗█ █║█ █╔═════╗█ █╔═╗█ █║\n" +
@@ -22,7 +22,7 @@
     "╚═════╗█ █╠══════█ █╨█ █══════╣█ █╔═════╝\n" +
     "██████║█ █║█                 █║█ █║██████\n" +
     "══════╝█ █╨█ █╔════█ █════╗█ █╨█ █╚══════\n" +
-    "             █║           ║█             \n" +
+    "|            █║           ║█            |\n" +
     "══════╗█  ╥█ █║███████████║█ █╥█ █╔══════\n" +
     "██████║█  ║█ █╚═══════════╝█ █║█ █║██████\n" +
     "██████║█  ║█                 █║█ █║██████\n" +
@@ -36,16 +36,13 @@
     "║█                                     █║\n" +
     "╚═══════════════════════════════════════╝";
 
-        public PathFinding()
-        {
-
-        }
 
         public (int, int) Run(int startX, int startY, int endX, int endY)
         {
 
 
             SetMapArray();
+            SetNeighbors();
             start = mapArray[startX, startY];
             end = mapArray[endX, endY];
             List<Spot> openList = new List<Spot>();
@@ -122,14 +119,13 @@
             return (0, 0);
 
         }
-
-
         private void SetMapArray()
         {
             rows = ghostmap.Split("\n");
             rowCount = rows.Length;
             columnCount = rows[0].Length;
             mapArray = new Spot[columnCount, rowCount];
+
             for (int row = 0; row < rowCount; row++)
             {
                 for (int column = 0; column < columnCount; column++)
@@ -137,11 +133,18 @@
                     if (Convert.ToString(rows[row][column]) == " ")
                     {
                         mapArray[column, row] = new Spot(column, row, columnCount, rowCount);
+
                     }
 
                 }
             }
 
+
+
+
+        }
+        private void SetNeighbors()
+        {
             for (int row = 0; row < rowCount; row++)
             {
                 for (int column = 0; column < columnCount; column++)
@@ -153,18 +156,12 @@
 
                 }
             }
-
-
         }
-
         public float heuristic(Spot a, Spot b)
         {
             float d = Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
             return d;
         }
-
-
-
     }
 
     class Spot

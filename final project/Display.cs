@@ -55,7 +55,6 @@
         {
             Render(map, ConsoleColor.DarkBlue, ConsoleColor.Black);
         }
-
         public void RenderDot(char[,] dots)
         {
             //Render(x, ConsoleColor.White, ConsoleColor.Black);
@@ -71,7 +70,6 @@
                 }
             }
         }
-
         private void Render(string @string, ConsoleColor foreground, ConsoleColor background)
         {
             Console.ForegroundColor = foreground;
@@ -96,7 +94,6 @@
                 }
             }
         }
-
         public void RenderPlayer(int x, int y, int speed_X, int speed_Y)
         {
             Console.SetCursorPosition(x, y);
@@ -147,7 +144,6 @@
                 Console.Write(' ');
             }
         }
-
         public void RenderGhost(int x, int y, int tempX, int tempY, ConsoleColor ghostcolor)
         {
             Console.SetCursorPosition(x, y);

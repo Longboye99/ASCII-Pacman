@@ -1,4 +1,6 @@
-﻿namespace final_project
+﻿using System;
+
+namespace final_project
 {
     internal class Program
     {
@@ -22,41 +24,30 @@
                 case 2:
                     titlescreen.ExitGame();
                     break;
-                    /*case 3: 
-                        Console.Clear();
-
-                        pathFinding.Run(16,10, 20,17);                                    
-                        foreach (var item in pathFinding.path)
+                case 3: 
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Random rnd = new Random();
+                    int x = 0, y = 0;
+                    bool temp = true;
+                    for (int i = 0; i < 25; i++)
+                    {
+                        temp = true;
+                        while (temp == true)
                         {
-                            Console.SetCursorPosition(item.x,item.y);
-                            Console.BackgroundColor = ConsoleColor.Green;
-                            Console.Write(" ");
-                        }
-                        display.RenderMap();
-                        Console.ReadLine();
-                        Console.Clear();
+                            x = rnd.Next(19, 41);
+                            y = rnd.Next(1, 6);
+                            if (gameManager.mapArray[x,y] != null)
+                            {
+                                temp = gameManager.mapArray[x, y];
+                            }
 
-                        pathFinding.Run(16, 10, 21, 17);
-                        foreach (var item in pathFinding.path)
-                        {
-                            Console.SetCursorPosition(item.x, item.y);
-                            Console.BackgroundColor = ConsoleColor.Green;
-                            Console.Write(" ");
                         }
-                        display.RenderMap();
-                        Console.ReadLine();
+                        Console.WriteLine(x + " , " + y);
+                    }
+                    break;
 
-                        Console.Clear();
 
-                        pathFinding.Run(16, 10, 22, 17);
-                        foreach (var item in pathFinding.path)
-                        {
-                            Console.SetCursorPosition(item.x, item.y);
-                            Console.BackgroundColor = ConsoleColor.Green;
-                            Console.Write(" ");
-                        }
-                        display.RenderMap();
-                        break;*/
             }
 
         }
