@@ -27,11 +27,11 @@
             homeX = x; homeY = y;
             tempX = x; tempY = y + 1;
             IsWall = mapArray;
-            state = wander;
+            state = Wander;
             color = ghostcolor;
             tempcolor = ghostcolor;
         }
-        private (int, int) wander(int player_X, int player_Y)
+        private (int, int) Wander(int player_X, int player_Y)
         {
 
             Random rnd = new Random();
@@ -50,23 +50,23 @@
             if (frameCounter == 15)
             {
                 frameCounter = 0;
-                state = chase;
+                state = Chase;
             }
             return (targetX, targetY);
         }
-        private (int, int) chase(int player_X, int player_Y)
+        private (int, int) Chase(int player_X, int player_Y)
         {
             frameCounter++;
             if (frameCounter == 50)
             {
                 frameCounter = 0;
-                state = wander;
+                state = Wander;
             }
             targetX = player_X;
             targetY = player_Y;
             return (targetX, targetY);
         }
-        private (int, int) frighten(int player_X, int player_Y)
+        private (int, int) Scared(int player_X, int player_Y)
         {
             Random rnd = new Random();
             color = ConsoleColor.Blue;
@@ -167,11 +167,11 @@
             {
                 frameCounter = 0;
                 color = tempcolor;
-                state = wander;
+                state = Wander;
             }
             return (targetX, targetY);
         }
-        public (int, int) dead(int player_X, int player_Y)
+        public (int, int) Dead(int player_X, int player_Y)
         {
             color = ConsoleColor.Black;
 
@@ -183,29 +183,29 @@
                 {
                     color = tempcolor;
                     frameCounter = 0;
-                    state = wander;
+                    state = Wander;
                 }
 
             }
             targetX = homeX; targetY = homeY;
             return (targetX, targetY);
         }
-        public void NextMove(int player_X, int player_Y)
+        public void GhostNextPos(int player_X, int player_Y)
         {
 
             tempX = x;
             tempY = y;
             state(player_X, player_Y);
-            (x, y) = pathFinding.Run(x, y, targetX, targetY);
+            (x, y) = pathFinding.RunPathFinding(x, y, targetX, targetY);
         }
-        public bool Update(int player_X, int player_Y, bool energize)
+        public bool UpdateGhostState(int player_X, int player_Y, bool energize)
         {
-            if (state != dead)
+            if (state != Dead)
             {
                 if (player_X == x && player_Y == y && energize == true)
                 {
                     frameCounter = 0;
-                    state = dead;
+                    state = Dead;
                     return true;
                 }
                 else if (player_X == x && player_Y == y && energize == false)
@@ -214,9 +214,9 @@
                 }
                 else if (energize == true)
                 {
-                    if (state != frighten)
+                    if (state != Scared)
                     {
-                        state = frighten;
+                        state = Scared;
                         frameCounter = 0;
                     }
                     return true;

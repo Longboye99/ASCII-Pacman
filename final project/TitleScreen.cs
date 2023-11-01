@@ -5,9 +5,9 @@ namespace final_project
     internal class TitleScreen
     {
         private int selectOption = 0;
-        private string[] option = { "Start", "Controls", "Exit", "Test" };
+        private string[] option = { "Start", "Controls", "Exit"};
 
-        public void displayTitle()
+        public void DisplayTitle()
         {
             Clear();
             ForegroundColor = ConsoleColor.DarkYellow;
@@ -48,7 +48,7 @@ Welcome to PACMAN. What would you like to do?
             do
             {
                 Clear();
-                displayTitle();
+                DisplayTitle();
 
 
                 key = Console.ReadKey(true).Key;
@@ -75,7 +75,7 @@ Welcome to PACMAN. What would you like to do?
             } while (key != ConsoleKey.Enter);
             return selectOption;
         }
-        public void Startgame()
+        public void StartGame()
         {
             Clear();
             GameManager gameManager = new GameManager();

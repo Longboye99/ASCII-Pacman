@@ -2,10 +2,10 @@
 {
     internal class PathFinding
     {
-        public Spot[,] mapArray;
+        public Tile[,] mapArray;
         public string[] rows;
-        Spot start;
-        Spot end;
+        Tile start;
+        Tile end;
 
         public int rowCount;
         public int columnCount;
@@ -37,7 +37,7 @@
     "╚═══════════════════════════════════════╝";
 
 
-        public (int, int) Run(int startX, int startY, int endX, int endY)
+        public (int, int) RunPathFinding(int startX, int startY, int endX, int endY)
         {
 
 
@@ -45,8 +45,8 @@
             SetNeighbors();
             start = mapArray[startX, startY];
             end = mapArray[endX, endY];
-            List<Spot> openList = new List<Spot>();
-            List<Spot> closedList = new List<Spot>();
+            List<Tile> openList = new List<Tile>();
+            List<Tile> closedList = new List<Tile>();
 
             openList.Add(start);
 
@@ -61,12 +61,12 @@
                     }
                 }
 
-                Spot current = openList[lowestIndex];
+                Tile current = openList[lowestIndex];
 
                 if (openList[lowestIndex] == end)
                 {
-                    List<Spot> path = new List<Spot>();
-                    Spot temp = current;
+                    List<Tile> path = new List<Tile>();
+                    Tile temp = current;
                     path.Add(temp);
                     while (temp.previous != null)
                     {
@@ -89,10 +89,10 @@
                 openList.Remove(current);
                 closedList.Add(current);
 
-                List<Spot> neighbors = current.neighbors;
+                List<Tile> neighbors = current.neighbors;
                 for (int i = 0; i < neighbors.Count; i++)
                 {
-                    Spot neighbor = neighbors[i];
+                    Tile neighbor = neighbors[i];
 
                     if (closedList.Contains(neighbor) == false)
                     {
@@ -110,7 +110,7 @@
                             openList.Add(neighbor);
                         }
 
-                        neighbor.h = heuristic(neighbor, end);
+                        neighbor.h = Heuristic(neighbor, end);
                         neighbor.f = neighbor.g + neighbor.h;
                         neighbor.previous = current;
                     }
@@ -124,7 +124,7 @@
             rows = ghostmap.Split("\n");
             rowCount = rows.Length;
             columnCount = rows[0].Length;
-            mapArray = new Spot[columnCount, rowCount];
+            mapArray = new Tile[columnCount, rowCount];
 
             for (int row = 0; row < rowCount; row++)
             {
@@ -132,7 +132,7 @@
                 {
                     if (Convert.ToString(rows[row][column]) == " ")
                     {
-                        mapArray[column, row] = new Spot(column, row, columnCount, rowCount);
+                        mapArray[column, row] = new Tile(column, row, columnCount, rowCount);
 
                     }
 
@@ -157,14 +157,14 @@
                 }
             }
         }
-        public float heuristic(Spot a, Spot b)
+        public float Heuristic(Tile a, Tile b)
         {
             float d = Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
             return d;
         }
     }
 
-    class Spot
+    class Tile
     {
         public int x;
         public int y;
@@ -173,9 +173,9 @@
         public float h = 0;
         int columnCount;
         int rowCount;
-        public List<Spot> neighbors = new List<Spot>();
-        public Spot previous;
-        public Spot(int _x, int _y, int _columnCount, int _rowCount)
+        public List<Tile> neighbors = new List<Tile>();
+        public Tile previous;
+        public Tile(int _x, int _y, int _columnCount, int _rowCount)
         {
             x = _x;
             y = _y;
@@ -183,7 +183,7 @@
             rowCount = _rowCount;
         }
 
-        public void AddNeighbors(Spot[,] mapArray)
+        public void AddNeighbors(Tile[,] mapArray)
         {
             if (x < columnCount - 1)
             {

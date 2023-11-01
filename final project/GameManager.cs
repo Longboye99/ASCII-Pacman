@@ -40,7 +40,7 @@ namespace final_project
     "║█                                     █║\n" +
     "╚═══════════════════════════════════════╝";
         char[,] dotsArray;
-        public bool[,] mapArray;
+        public bool[,] IsWall;
 
         public GameManager()
         {
@@ -48,20 +48,43 @@ namespace final_project
             SetDotsArray();
 
         }
+        private void SetDotsArray()
+        {
+            string[] rows = Dots.Split("\n");
+            int rowCount = rows.Length;
+            int columnCount = rows[0].Length;
+            dotsArray = new char[columnCount, rowCount];
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int column = 0; column < columnCount; column++)
+                {
+                    dotsArray[column, row] = rows[row][column];
+                }
+            }
+        }
+        private void SetMapArray()
+        {
+            string[] rows = Map.Split("\n");
+            int rowCount = rows.Length;
+            int columnCount = rows[0].Length;
+            IsWall = new bool[columnCount, rowCount];
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int column = 0; column < columnCount; column++)
+                {
+                    if (Convert.ToString(rows[row][column]) != " ")
+                        IsWall[column, row] = true;
+                }
+            }
+        }
         public void RunGame()
         {
-            Ghost a = new Ghost(20, 8, ConsoleColor.Red, mapArray);
-            Ghost b = new Ghost(17, 10, ConsoleColor.Magenta, mapArray);
-            Ghost c = new Ghost(20, 10, ConsoleColor.DarkYellow, mapArray);
-            Ghost d = new Ghost(23, 10, ConsoleColor.Cyan, mapArray);
+            Ghost a = new Ghost(20, 8, ConsoleColor.Red, IsWall);
+            Ghost b = new Ghost(17, 10, ConsoleColor.Magenta, IsWall);
+            Ghost c = new Ghost(20, 10, ConsoleColor.DarkYellow, IsWall);
+            Ghost d = new Ghost(23, 10, ConsoleColor.Cyan, IsWall);
             display.RenderMap();
-            display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
-            display.RenderGhost(a.x, a.y, a.tempX, a.tempY, a.color);
-            display.RenderGhost(b.x, b.y, b.tempX, b.tempY, b.color);
-            display.RenderGhost(c.x, c.y, c.tempX, c.tempY, c.color);
-            display.RenderGhost(d.x, d.y, d.tempX, d.tempY, d.color);
-            display.RenderDot(dotsArray);
-            ReadKey(true);
+            
             while (true)
             {
                 display.RenderPlayer(pos_X, pos_Y, speed_x, speed_y);
@@ -69,25 +92,25 @@ namespace final_project
                 display.RenderGhost(b.x, b.y, b.tempX, b.tempY, b.color);
                 display.RenderGhost(c.x, c.y, c.tempX, c.tempY, c.color);
                 display.RenderGhost(d.x, d.y, d.tempX, d.tempY, d.color);
-                if (a.Update(pos_X, pos_Y, energize_Trigger) == false)
+                if (a.UpdateGhostState(pos_X, pos_Y, energize_Trigger) == false)
                 {
                     break;
                 }
-                if (b.Update(pos_X, pos_Y, energize_Trigger) == false)
+                if (b.UpdateGhostState(pos_X, pos_Y, energize_Trigger) == false)
                 {
                     break;
                 }
-                if (c.Update(pos_X, pos_Y, energize_Trigger) == false)
+                if (c.UpdateGhostState(pos_X, pos_Y, energize_Trigger) == false)
                 {
                     break;
                 }
-                if (d.Update(pos_X, pos_Y, energize_Trigger) == false)
+                if (d.UpdateGhostState(pos_X, pos_Y, energize_Trigger) == false)
                 {
                     break;
                 }
-                input();
-                updatePos();
-                if (addScore() == true)
+                Input();
+                UpdatePlayerPos();
+                if (UpdateDots() == true)
                 {
                     display.RenderDot(dotsArray);
                 }
@@ -99,13 +122,14 @@ namespace final_project
                     Task.Delay(2000).Wait();
                     Clear();
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(@"
+                    Console.WriteLine(@$"
 ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗██╗██╗██╗
 ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║██║██║██║
  ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║██║██║██║
   ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║╚═╝╚═╝╚═╝
    ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║██╗██╗██╗
    ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝╚═╝╚═╝
+Your score is {score}.
 Thanks for playing! Press any key to exit.
 ");
                     ReadKey(true);
@@ -122,10 +146,10 @@ Thanks for playing! Press any key to exit.
                     }
                 }
 
-                a.NextMove(pos_X, pos_Y);
-                b.NextMove(pos_X, pos_Y);
-                c.NextMove(pos_X, pos_Y);
-                d.NextMove(pos_X, pos_Y);
+                a.GhostNextPos(pos_X, pos_Y);
+                b.GhostNextPos(pos_X, pos_Y);
+                c.GhostNextPos(pos_X, pos_Y);
+                d.GhostNextPos(pos_X, pos_Y);
 
 
 
@@ -157,36 +181,7 @@ Press any key to exit.
             ReadKey(true);
         }
 
-        private void SetDotsArray()
-        {
-            string[] rows = Dots.Split("\n");
-            int rowCount = rows.Length;
-            int columnCount = rows[0].Length;
-            dotsArray = new char[columnCount, rowCount];
-            for (int row = 0; row < rowCount; row++)
-            {
-                for (int column = 0; column < columnCount; column++)
-                {
-                    dotsArray[column, row] = rows[row][column];
-                }
-            }
-        }
-        private void SetMapArray()
-        {
-            string[] rows = Map.Split("\n");
-            int rowCount = rows.Length;
-            int columnCount = rows[0].Length;
-            mapArray = new bool[columnCount, rowCount];
-            for (int row = 0; row < rowCount; row++)
-            {
-                for (int column = 0; column < columnCount; column++)
-                {
-                    if (Convert.ToString(rows[row][column]) != " ")
-                        mapArray[column, row] = true;
-                }
-            }
-        }
-        public void input()
+        public void Input()
         {
             while (Console.KeyAvailable)
             {
@@ -194,28 +189,28 @@ Press any key to exit.
                 switch (key)
                 {
                     case ConsoleKey.A or ConsoleKey.LeftArrow:
-                        if (mapArray[pos_X - 1, pos_Y] != true)
+                        if (IsWall[pos_X - 1, pos_Y] != true)
                         {
                             speed_x = -1;
                             speed_y = 0;
                         }
                         break;
                     case ConsoleKey.D or ConsoleKey.RightArrow:
-                        if (mapArray[pos_X + 1, pos_Y] != true)
+                        if (IsWall[pos_X + 1, pos_Y] != true)
                         {
                             speed_x = 1;
                             speed_y = 0;
                         }
                         break;
                     case ConsoleKey.W or ConsoleKey.UpArrow:
-                        if (mapArray[pos_X, pos_Y - 1] != true)
+                        if (IsWall[pos_X, pos_Y - 1] != true)
                         {
                             speed_x = 0;
                             speed_y = -1;
                         }
                         break;
                     case ConsoleKey.S or ConsoleKey.DownArrow:
-                        if (mapArray[pos_X, pos_Y + 1] != true)
+                        if (IsWall[pos_X, pos_Y + 1] != true)
                         {
                             speed_x = 0;
                             speed_y = 1;
@@ -225,11 +220,11 @@ Press any key to exit.
                 }
             }
         }
-        public void updatePos()
+        public void UpdatePlayerPos()
         {
             if (speed_x == 1)
             {
-                if (mapArray[pos_X + 1, pos_Y] != true)
+                if (IsWall[pos_X + 1, pos_Y] != true)
                 {
                     pos_X++;
                     if (pos_X > 38)
@@ -240,7 +235,7 @@ Press any key to exit.
             }
             else if (speed_x == -1)
             {
-                if (mapArray[pos_X - 1, pos_Y] != true)
+                if (IsWall[pos_X - 1, pos_Y] != true)
                 {
                     pos_X--;
                     if (pos_X < 2)
@@ -251,20 +246,20 @@ Press any key to exit.
             }
             if (speed_y == 1)
             {
-                if (mapArray[pos_X, pos_Y + 1] != true)
+                if (IsWall[pos_X, pos_Y + 1] != true)
                 {
                     pos_Y++;
                 }
             }
             else if (speed_y == -1)
             {
-                if (mapArray[pos_X, pos_Y - 1] != true)
+                if (IsWall[pos_X, pos_Y - 1] != true)
                 {
                     pos_Y--;
                 }
             }
         }
-        public bool addScore()
+        public bool UpdateDots()
         {
             if (Convert.ToString(dotsArray[pos_X, pos_Y]) == "·")
             {

@@ -1,4 +1,6 @@
-﻿namespace final_project
+﻿using System;
+
+namespace final_project
 {
     public class Display
     {
@@ -53,32 +55,13 @@
 
         public void RenderMap()
         {
-            Render(map, ConsoleColor.DarkBlue, ConsoleColor.Black);
-        }
-        public void RenderDot(char[,] dots)
-        {
-            //Render(x, ConsoleColor.White, ConsoleColor.Black);
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.BackgroundColor = ConsoleColor.Black;
-            for (int i = 0; i < 23; i++)
-            {
-                for (int j = 0; j < 41; j++)
-                {
-                    Console.SetCursorPosition(j, i);
-                    if (Convert.ToString(dots[j, i]) != " ")
-                        Console.Write(dots[j, i]);
-                }
-            }
-        }
-        private void Render(string @string, ConsoleColor foreground, ConsoleColor background)
-        {
-            Console.ForegroundColor = foreground;
-            Console.BackgroundColor = background;
 
             Console.SetCursorPosition(0, 0);
             int x = Console.CursorLeft;
             int y = Console.CursorTop;
-            foreach (char c in @string)
+            foreach (char c in @map)
             {
                 if (c is '\n')
                 {
@@ -91,6 +74,20 @@
                 else
                 {
                     Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
+                }
+            }
+        }
+        public void RenderDot(char[,] dots)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+            for (int i = 0; i < 23; i++)
+            {
+                for (int j = 0; j < 41; j++)
+                {
+                    Console.SetCursorPosition(j, i);
+                    if (Convert.ToString(dots[j, i]) != " ")
+                        Console.Write(dots[j, i]);
                 }
             }
         }
